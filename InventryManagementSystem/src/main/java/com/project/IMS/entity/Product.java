@@ -1,51 +1,54 @@
 package com.project.IMS.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
+//---------------- PRODUCT ----------------
 @Entity
 @Table(name = "products")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
 
-    @NotBlank(message = "Product name cannot be empty")
-    @Size(max = 100, message = "Product name cannot exceed 100 characters")
-    private String name;
+ @Id
+ private Long productId;
 
-    @NotNull(message = "Cost cannot be null")
-    @Positive(message = "Cost must be greater than 0")
-    private Double cost;
+ @NotBlank
+ private String name;
 
-    @NotNull(message = "Price cannot be null")
-    @Positive(message = "Price must be greater than 0")
-    private Double price;
+ @NotBlank
+ private String unit;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    @NotNull(message = "Category must not be null")
-    private Category category;
+ @Positive
+ private Double cost;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private Inventory inventory;
+ @Positive
+ private Double price;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<OrderDetails> orderDetails = new ArrayList<>();
+ // Associations
+ @ManyToOne
+ @JoinColumn(name = "user_id", nullable = false)
+ private User user;
+
+ @ManyToOne
+ @JoinColumn(name = "category_id", nullable = false)
+ private Category category;
+
+ @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+ private List<Inventory> inventories;
+
+ @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+ private List<OrderDetail> orderDetails;
+
+ // Getters and Setters
 }
+
+
 

@@ -1,36 +1,51 @@
 package com.project.IMS.entity;
 
-import java.util.ArrayList;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
+// ---------------- USERS ----------------
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Username cannot be empty")
-    @Size(min = 3, max = 50, message = "Username must be between 3 to 50 characters")
+    @NotBlank
+    @Size(max = 100)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @NotBlank(message = "Password hash cannot be empty")
+    @NotBlank
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @NotBlank(message = "Role cannot be empty")
-    private String role;
+    // Associations
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> categories;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Log> logs = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Inventory> inventories;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Supplier> suppliers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Customer> customers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Log> logs;
+
+    // Getters and Setters
 }
+
 

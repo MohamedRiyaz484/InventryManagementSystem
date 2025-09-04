@@ -1,7 +1,5 @@
 package com.project.IMS.entity;
 
-import java.time.OffsetDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,36 +7,35 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
-//---------------- LOG ----------------
+//---------------- ORDER_DETAIL ----------------
 @Entity
-@Table(name = "logs")
-public class Log {
+@Table(name = "order_details")
+public class OrderDetail{
 
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long logId;
+ private Long orderDetailId;
 
- @NotBlank
- private String action;
+ @Positive
+ private Integer quantity;
 
- @NotBlank
- private String entityType;
-
- private Long entityId;
-
- private OffsetDateTime timestamp;
-
- private String details;
+ @Positive
+ private Double unitPrice;
 
  // Associations
  @ManyToOne
- @JoinColumn(name = "user_id", nullable = false)
- private User user;
+ @JoinColumn(name = "order_id", nullable = false)
+ private Order order;
+
+ @ManyToOne
+ @JoinColumn(name = "product_id", nullable = false)
+ private Product product;
 
  // Getters and Setters
 }
+
 
 
 
