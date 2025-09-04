@@ -2,6 +2,8 @@ package com.project.IMS.entity;
 
 import java.time.OffsetDateTime;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,10 +46,12 @@ public class Inventory {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
+ @JsonManagedReference
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "product_id", nullable = false)
+ @JsonManagedReference
  private Product product;
 
 }

@@ -2,6 +2,9 @@ package com.project.IMS.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -41,16 +44,20 @@ public class Product {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
+ @JsonManagedReference
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "category_id", nullable = false)
+ @JsonManagedReference
  private Category category;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+ @JsonBackReference
  private List<Inventory> inventories;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+ @JsonBackReference
  private List<OrderDetail> orderDetails;
 
  // Getters and Setters

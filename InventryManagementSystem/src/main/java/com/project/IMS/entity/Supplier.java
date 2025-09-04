@@ -2,6 +2,9 @@ package com.project.IMS.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,9 +41,11 @@ public class Supplier {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
+ @JsonManagedReference
  private User user;
 
  @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+ @JsonBackReference
  private List<Order> orders;
 
  // Getters and Setters

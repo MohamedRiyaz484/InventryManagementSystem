@@ -1,5 +1,7 @@
 package com.project.IMS.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +38,7 @@ public class OrderDetail{
 
  @ManyToOne
  @JoinColumn(name = "product_id", nullable = false)
+ @JsonManagedReference
  private Product product;
 
  // Getters and Setters

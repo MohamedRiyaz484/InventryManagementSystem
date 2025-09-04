@@ -3,6 +3,9 @@ package com.project.IMS.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -36,17 +39,21 @@ public class Order {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
+ @JsonBackReference
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "supplier_id")
+ @JsonBackReference
  private Supplier supplier;
 
  @ManyToOne
  @JoinColumn(name = "customer_id")
+ @JsonBackReference
  private Customer customer;
 
  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+ @JsonManagedReference
  private List<OrderDetail> orderDetails;
 
  // Getters and Setters
