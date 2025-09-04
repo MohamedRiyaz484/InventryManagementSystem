@@ -6,4 +6,5 @@ import com.project.IMS.entity.Supplier;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Integer>{
 
+	// Hello this is riyaz
 }
