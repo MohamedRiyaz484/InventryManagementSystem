@@ -11,9 +11,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //---------------- INVENTORY ----------------
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "inventory")
 public class Inventory {
 

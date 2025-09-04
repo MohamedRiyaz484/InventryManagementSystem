@@ -8,12 +8,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //---------------- ORDER_DETAIL ----------------
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "order_details")
 public class OrderDetail{
-
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
  private Long orderDetailId;

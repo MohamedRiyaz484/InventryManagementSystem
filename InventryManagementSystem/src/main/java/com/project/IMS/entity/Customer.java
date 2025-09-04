@@ -13,9 +13,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //---------------- CUSTOMER ----------------
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "customers")
 public class Customer {
 
@@ -39,5 +45,3 @@ public class Customer {
 
  // Getters and Setters
 }
-
-

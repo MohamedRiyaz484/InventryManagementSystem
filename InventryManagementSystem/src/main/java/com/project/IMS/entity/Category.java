@@ -12,9 +12,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //---------------- CATEGORY ----------------
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "categories")
 public class Category {
 
