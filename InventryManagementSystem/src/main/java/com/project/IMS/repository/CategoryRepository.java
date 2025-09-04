@@ -8,5 +8,5 @@ import com.project.IMS.entity.Category;
 @Repository
 // Siva's Module
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-
+	
 }
