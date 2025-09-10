@@ -1,6 +1,8 @@
 package com.project.IMS.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "order_details")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="orderDetailId")
 public class OrderDetail{
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +41,7 @@ public class OrderDetail{
 
  @ManyToOne
  @JoinColumn(name = "product_id", nullable = false)
- @JsonManagedReference
+// @JsonManagedReference
  private Product product;
 
  // Getters and Setters

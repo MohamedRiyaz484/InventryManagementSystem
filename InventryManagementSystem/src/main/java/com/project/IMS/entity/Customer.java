@@ -3,7 +3,9 @@ package com.project.IMS.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,6 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customers")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="customerId")
 public class Customer {
 
  @Id
@@ -41,11 +44,11 @@ public class Customer {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
- @JsonManagedReference
+ //@JsonManagedReference
  private User user;
 
  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
- @JsonBackReference
+ //@JsonBackReference
  private List<Order> orders;
 
  // Getters and Setters

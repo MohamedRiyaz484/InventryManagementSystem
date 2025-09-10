@@ -2,7 +2,9 @@ package com.project.IMS.entity;
 
 import java.time.OffsetDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "logs")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="logId")
 public class Log {
 
  @Id
@@ -43,7 +46,7 @@ public class Log {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
- @JsonManagedReference
+// @JsonManagedReference
  private User user;
 
  // Getters and Setters

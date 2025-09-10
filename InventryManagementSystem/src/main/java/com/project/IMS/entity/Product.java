@@ -3,7 +3,9 @@ package com.project.IMS.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,6 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "products")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="productId")
 public class Product {
 
  @Id
@@ -44,20 +47,20 @@ public class Product {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
- @JsonManagedReference
+// @JsonManagedReference
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "category_id", nullable = false)
- @JsonManagedReference
+ //@JsonManagedReference
  private Category category;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
- @JsonBackReference
+ //@JsonBackReference
  private List<Inventory> inventories;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
- @JsonBackReference
+ //@JsonBackReference
  private List<OrderDetail> orderDetails;
 
  // Getters and Setters

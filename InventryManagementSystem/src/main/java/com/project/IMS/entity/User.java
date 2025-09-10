@@ -4,6 +4,8 @@ package com.project.IMS.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,6 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="id")
 public class User {
 
     @Id
@@ -42,31 +45,31 @@ public class User {
 
     // Associations
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+  //  @JsonBackReference
     private List<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Inventory> inventories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+  //  @JsonBackReference
     private List<Supplier> suppliers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+  //  @JsonBackReference
     private List<Customer> customers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+  //  @JsonBackReference
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+  //  @JsonBackReference
     private List<Log> logs;
 
 }

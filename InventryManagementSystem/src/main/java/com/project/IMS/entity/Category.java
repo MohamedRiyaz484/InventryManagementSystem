@@ -3,10 +3,16 @@ package com.project.IMS.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "categories")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property="categoryId")
 public class Category {
 
  @Id
@@ -38,12 +45,15 @@ public class Category {
 
  // Associations
  @ManyToOne
- @JoinColumn(name = "user_id", nullable = false)
- @JsonManagedReference
+ //(fetch = FetchType.EAGER) 
+ @JoinColumn(name = "user_id",nullable =false)
+ //@JsonManagedReference
+// @JsonIdentityReference(alwaysAsId=true)
  private User user;
 
  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
- @JsonBackReference
+ //@JsonBackReference
+// @JsonIgnore
  private List<Product> products;
 
  // Getters and Setters
