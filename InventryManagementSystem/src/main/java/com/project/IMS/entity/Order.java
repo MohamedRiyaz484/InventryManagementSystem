@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,6 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "orders")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "orderId")
 public class Order {
 
  @Id
@@ -39,21 +42,21 @@ public class Order {
  // Associations
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
- @JsonBackReference
+// @JsonBackReference
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "supplier_id")
- @JsonBackReference
+ //@JsonBackReference
  private Supplier supplier;
 
  @ManyToOne
  @JoinColumn(name = "customer_id")
- @JsonBackReference
+// @JsonBackReference
  private Customer customer;
 
  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
- @JsonManagedReference
+ //@JsonManagedReference
  private List<OrderDetail> orderDetails;
 
  // Getters and Setters
