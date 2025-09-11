@@ -3,6 +3,7 @@ package com.project.IMS.controller;
 import com.project.IMS.entity.Supplier;
 import com.project.IMS.service.SupplierService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +22,21 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     // GET /api/suppliers/getAll
-    @GetMapping("/getAll")
+   // @GetMapping("/getAll")
     public ResponseEntity<List<Supplier>> getAllSuppliers() {
         return ResponseEntity.ok(supplierService.getAllSuppliers());
     }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Supplier>> getSuppliers(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<Supplier> suppliers = supplierService.getSuppliersByUserId(userId);
+        return ResponseEntity.ok(suppliers);
+    }
+
 
     // GET /api/suppliers/getById/{id}
     @GetMapping("/getById/{id}")

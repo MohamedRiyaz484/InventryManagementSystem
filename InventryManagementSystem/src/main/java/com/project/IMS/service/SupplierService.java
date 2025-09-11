@@ -34,6 +34,11 @@ public class SupplierService {
         // No user repository call; just trust the ID is valid
         return supplierRepository.save(supplier);
     }
+    
+    public List<Supplier> getSuppliersByUserId(Integer userId) {
+        return supplierRepository.findByUserId(userId);
+    }
+
 
     public Supplier updateSupplier(Long id, Supplier supplierDetails) {
         Supplier existing = getSupplierById(id);
@@ -44,7 +49,7 @@ public class SupplierService {
         // ✅ Add new fields
         existing.setPhoneNumber(supplierDetails.getPhoneNumber());
         existing.setLocation(supplierDetails.getLocation());
-        existing.setProductType(supplierDetails.getProductType());
+        
 
         if (supplierDetails.getUser() != null) {
             User user = new User();

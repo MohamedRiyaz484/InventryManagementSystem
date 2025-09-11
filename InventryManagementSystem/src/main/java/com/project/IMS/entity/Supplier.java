@@ -57,21 +57,19 @@ public class Supplier {
  private String location;
 
 
- @NotBlank(message = "Product type is required")
- @Pattern(regexp = "^[a-zA-Z ]+$", message = "Product type must contain only letters and spaces")
- private String productType;
+ 
 
  // Associations
  @ManyToOne
 // @JoinColumn(name = "user_id", nullable = false)
  //@JsonManagedReference
  @JoinColumn(name = "user_id")
- @JsonIdentityReference(alwaysAsId = true)  
+// @JsonIdentityReference(alwaysAsId = true)  
  private User user;
 
  @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonBackReference
- @JsonIgnore
+ //@JsonIgnore
  private List<Order> orders;
 
  // Getters and Setters

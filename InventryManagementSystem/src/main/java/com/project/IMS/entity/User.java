@@ -3,6 +3,11 @@ package com.project.IMS.entity;
 
 import java.util.List;
 
+import jakarta.validation.constraints.Email;
+
+
+
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +21,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,33 +34,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
-
-	
-
-	    @Id
+         @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+	    private Integer id;
 
-	    @NotBlank
-	    @Size(max = 100)
-	    @Column(nullable = false)
+	    @NotBlank(message = "Name is required")
 	    private String name;
 
-//	    @NotBlank
-//	    @Column(nullable = false, unique = true)
-//	    private String email;
+	    @Email(message = "Invalid email format")
+	//    @NotBlank(message = "Email is required")
+	    private String email;
 
-	    @NotBlank
-	    @Column(name = "password_hash", nullable = false)
-	    private String passwordHash;
 
-//	    @NotBlank
-//	    @Column(nullable = false, unique = true)
-//	    private String phoneNumber;
-//	
+	    @NotBlank(message = "Password is required")
+//	    @Pattern(
+//	    	    regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+//	    	    message = "Password must be at least 8 characters and include letters, numbers, and special characters"
+//	    	)
+	    	private String pwd;
+
+
+	    @NotBlank(message = "Phone number is required")
+	   // @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits")
+	    private String phoneNumber;
 
 
     // Associations
@@ -71,7 +77,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
-    @JsonIgnore
+   // @JsonIgnore
     private List<Supplier> suppliers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
