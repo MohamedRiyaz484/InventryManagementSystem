@@ -3,7 +3,15 @@ package com.project.IMS.entity;
 
 import java.util.List;
 
+import jakarta.validation.constraints.Email;
+
+
+
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,7 +21,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,49 +34,62 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
+         @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Integer id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	    @NotBlank(message = "Name is required")
+	    private String name;
 
-    @NotBlank
-    @Size(max = 100)
-    @Column(nullable = false, unique = true)
-    private String username;
+	    @Email(message = "Invalid email format")
+	//    @NotBlank(message = "Email is required")
+	    private String email;
 
-    @NotBlank
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+
+	    @NotBlank(message = "Password is required")
+//	    @Pattern(
+//	    	    regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+//	    	    message = "Password must be at least 8 characters and include letters, numbers, and special characters"
+//	    	)
+	    	private String pwd;
+
+
+	    @NotBlank(message = "Phone number is required")
+	   // @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits")
+	    private String phoneNumber;
+
 
     // Associations
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Inventory> inventories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
+  // @JsonIgnore
     private List<Supplier> suppliers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Customer> customers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+   // @JsonBackReference
     private List<Log> logs;
 
 }
