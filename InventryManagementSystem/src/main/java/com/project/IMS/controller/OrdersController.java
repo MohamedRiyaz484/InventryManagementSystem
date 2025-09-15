@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.IMS.DTO.OrderDetailsDTO;
 import com.project.IMS.DTO.ProductDetailsDTO;
+import com.project.IMS.DTO.PurchaseOrderForm;
+import com.project.IMS.DTO.SalesOrderForm;
+import com.project.IMS.DTO.SalesProductDTO;
 import com.project.IMS.entity.User;
 import com.project.IMS.repository.CustomerRepository;
 import com.project.IMS.repository.InventoryRepository;
@@ -55,8 +59,8 @@ public class OrdersController {
 	public String getOrderType(@RequestParam String type, Model mod,HttpServletRequest req)
 	{
 		Integer userId=Integer.parseInt(req.getSession(false).getAttribute("userId").toString());
-//		List<Product> products =  this.products.getByUserId(userId);
 		List<Object[]> results = this.products.getProducts(userId);
+		System.out.println(results);
 		List<ProductDetailsDTO> products = results.stream().map(row ->
 		{
 			return new ProductDetailsDTO(
@@ -70,7 +74,9 @@ public class OrdersController {
 					(Integer)row[7]
 					);
 		}).toList();
+		System.out.println(products);
 		mod.addAttribute("products",products);
+		
 
 		if(type.equalsIgnoreCase("In")) 
 		{
@@ -102,27 +108,30 @@ public class OrdersController {
 		mod.addAttribute("orders", orders);
 		return "orders";
 	}
-	 @PostMapping("/purchase")
-	    public String savePurchaseOrder(@RequestParam Long supplierId,
-	                                    @RequestParam List<Integer> product_id,
-	                                    @RequestParam List<Integer> quantity,
-	                                    @RequestParam List<Double> unit_price,
-	                                    @RequestParam(required = false) String notes,
-	                                    HttpServletRequest req) {
-	        User user = userRepo.findById(Integer.parseInt(req.getSession(false).getAttribute("userId").toString())).orElseThrow(); // TODO: replace with logged-in user
-	        orderService.createPurchaseOrder(supplierId, product_id, quantity, unit_price, notes, user);
-	        return "redirect:/orders/orderView";
-	    }
+	@PostMapping("/purchase")
+	public String savePurchaseOrder(@ModelAttribute PurchaseOrderForm form,
+	                                HttpServletRequest req) {
+	    User user = userRepo.findById(
+	        Integer.parseInt(req.getSession(false).getAttribute("userId").toString())
+	    ).orElseThrow();
 
-	    @PostMapping("/sales")
-	    public String saveSalesOrder(@RequestParam Integer customerId,
-	                                 @RequestParam List<Integer> product_id,
-	                                 @RequestParam List<Integer> quantity,
-	                                 @RequestParam List<Double> unit_price,
-	                                 @RequestParam(required = false) String notes,
-	                                 HttpServletRequest req) {
-	        User user = userRepo.findById(Integer.parseInt(req.getSession(false).getAttribute("userId").toString())).orElseThrow(); // TODO: replace with logged-in user
-	        orderService.createSalesOrder(customerId, product_id, quantity, unit_price, notes, user);
-	        return "redirect:/orders/orderView";
-	    }
+	    orderService.createPurchaseOrder(form, user);
+
+	    return "redirect:/orders/orderView";
+	}
+
+	 @PostMapping("/sales")
+	 public String saveSalesOrder(@ModelAttribute SalesOrderForm form,
+	                              HttpServletRequest req) {
+
+	     User user = userRepo.findById(
+	         Integer.parseInt(req.getSession(false).getAttribute("userId").toString())
+	     ).orElseThrow();
+
+	     orderService.createSalesOrder(form, user);
+
+	     return "redirect:/orders/orderView";
+	 }
+
+
 }

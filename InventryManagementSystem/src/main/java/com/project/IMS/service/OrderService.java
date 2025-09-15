@@ -6,6 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.IMS.DTO.PurchaseOrderForm;
+import com.project.IMS.DTO.PurchaseProductDTO;
+import com.project.IMS.DTO.SalesOrderForm;
+import com.project.IMS.DTO.SalesProductDTO;
 import com.project.IMS.customExceptions.OutOfStockException;
 import com.project.IMS.customExceptions.StockExceededException;
 import com.project.IMS.entity.Inventory;
@@ -27,103 +31,133 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class OrderService {
 
-    @Autowired private OrderRepository orderRepo;
-    @Autowired private OrderDetailRepository orderDetailRepo;
-    @Autowired private ProductRepository productRepo;
-    @Autowired private InventoryRepository inventoryRepo;
-    @Autowired private LogRepository logRepo;
-    @Autowired private SupplierRepository supplierRepo;
-    @Autowired private CustomerRepository customerRepo;
+	@Autowired
+	private OrderRepository orderRepo;
+	@Autowired
+	private OrderDetailRepository orderDetailRepo;
+	@Autowired
+	private ProductRepository productRepo;
+	@Autowired
+	private InventoryRepository inventoryRepo;
+	@Autowired
+	private LogRepository logRepo;
+	@Autowired
+	private SupplierRepository supplierRepo;
+	@Autowired
+	private CustomerRepository customerRepo;
 
-    public void createPurchaseOrder(Long supplierId, List<Integer> productIds, List<Integer> quantities, List<Double> unitPrices, String notes, User user) {
-        Order order = new Order();
-        order.setUser(user);
-        order.setSupplier(supplierRepo.findById(supplierId).orElseThrow());
-        order.setType("in");
-        order.setNotes(notes);
+	@Transactional
+	public void createPurchaseOrder(PurchaseOrderForm form, User user) {
+	    Order order = new Order();
+	    order.setUser(user);
+	    order.setSupplier(supplierRepo.findById(form.getSupplierId()).orElseThrow());
+	    order.setType("in");
+	    order.setNotes(form.getNotes());
 
-        Order saved = orderRepo.save(order);
-        double total = 0.0;
+	    Order saved = orderRepo.save(order);
+	    double total = 0.0;
 
-        for (int i = 0; i < productIds.size(); i++) {
-            Integer productId = productIds.get(i);
-            int qty = quantities.get(i);
-            double unitPrice = unitPrices.get(i);
+	    for (PurchaseProductDTO dto : form.getProducts()) {
+	        if (dto.getProductId() == null || dto.getQuantity() == null || dto.getUnitPrice() == null) {
+	            continue;
+	        }
 
-            Product product = productRepo.findById(productId).orElseThrow();
-            Inventory inventory = inventoryRepo.getByProductId(productId);
+	        Product product = productRepo.findById(dto.getProductId()).orElseThrow();
+	        Inventory inventory = inventoryRepo.getByProductId(dto.getProductId());
 
-            // update inventory
-            inventory.setQuantity(inventory.getQuantity() + qty);
-            
-            if (inventory.getQuantity() > inventory.getMaxLevel()) {
-                throw new StockExceededException("Max stock reached for product " + product.getName());
-            }
-            if(inventory.getQuantity().equals(0)) 
-            {
-            	inventory.setMaxLevel(qty*2);
-            	inventory.setMinLevel((int)Math.round(qty*0.5));
-            	inventory.setReorderPoint(inventory.getMinLevel()+inventory.getMinLevel()/2);  
-            }
-            // always update cost (not only when zero stock)
-            product.setCost(unitPrice);
-            product.setPrice(unitPrice+unitPrice*0.2);
-            productRepo.save(product);
-            orderDetailRepo.saveOrderDetails(qty, unitPrice, saved.getOrderId(), productId);
-            Log log = new Log();
- 	        log.setUser(user);
- 	        log.setAction("ADD_STOCK");
- 	        log.setEntityType("product");
- 	        log.setEntityId(Long.valueOf(productIds.get(i)));
- 	        log.setTimestamp(OffsetDateTime.now());
- 	        log.setDetails("Added " + quantities.get(i) + " units for product ID " + productIds.get(i)+" from "+order.getSupplier().getName());
- 	        logRepo.save(log);
-            total += qty * unitPrice;
-        }
-        saved.setTotalAmount(total);
-        orderRepo.save(saved);
-    }
+	        // update inventory
+	        inventory.setQuantity(inventory.getQuantity() + dto.getQuantity());
 
-    public void createSalesOrder(Integer customerId, List<Integer> productIds, List<Integer> quantities, List<Double> unitPrices, String notes, User user) {
-        Order order = new Order();
-        order.setUser(user);
-        order.setCustomer(customerRepo.findById(customerId).orElseThrow());
-        order.setType("out");
-        order.setNotes(notes);
+	        if (inventory.getQuantity() > inventory.getMaxLevel()) {
+	            throw new StockExceededException("Max stock reached for product " + product.getName());
+	        }
+	        if (inventory.getQuantity().equals(0)) {
+	            inventory.setMaxLevel(dto.getQuantity() * 2);
+	            inventory.setMinLevel((int) Math.round(dto.getQuantity() * 0.5));
+	            inventory.setReorderPoint(inventory.getMinLevel() + inventory.getMinLevel() / 2);
+	        }
 
-        Order saved = orderRepo.save(order);
-        double total = 0.0;
-        for (int i = 0; i < productIds.size(); i++) {
-            Integer productId = productIds.get(i);
-            int qty = quantities.get(i);
-            double unitPrice = unitPrices.get(i);
+	        // update cost/price
+	        product.setCost(dto.getUnitPrice());
+	        product.setPrice(dto.getUnitPrice() + dto.getUnitPrice() * 0.2);
+	        productRepo.save(product);
 
-            Product product = productRepo.findById(productId).orElseThrow();
-            Inventory inventory = inventoryRepo.getByProductId(productId);
+	        orderDetailRepo.saveOrderDetails(dto.getQuantity(), dto.getUnitPrice(), saved.getOrderId(), dto.getProductId());
 
-            if (inventory.getQuantity() < qty) {
-                throw new OutOfStockException("Not enough stock for " + product.getName());
-            }
-            productRepo.save(product);
-            inventory.setQuantity(inventory.getQuantity() - qty);
-            inventoryRepo.save(inventory);
-
-            orderDetailRepo.saveOrderDetails(qty, unitPrice, saved.getOrderId(), productId);
-
-            Log log = new Log();
+	        Log log = new Log();
 	        log.setUser(user);
-	        log.setAction("SALE");
+	        log.setAction("ADD_STOCK");
 	        log.setEntityType("product");
-	        log.setEntityId(Long.valueOf(productIds.get(i)));
+	        log.setEntityId(Long.valueOf(dto.getProductId()));
 	        log.setTimestamp(OffsetDateTime.now());
-	        log.setDetails
-	        ("Added " + qty + " units of " + product.getName() + " from supplier " + order.getCustomer().getName());
+	        log.setDetails("Added " + dto.getQuantity() + " units for product ID " + dto.getProductId() +
+	                       " from " + order.getSupplier().getName());
 	        logRepo.save(log);
-            total += qty * unitPrice;
+	        
+	        total += dto.getQuantity() * dto.getUnitPrice();
+	    }
+
+	    saved.setTotalAmount(total);
+	    orderRepo.save(saved);
+	}
+
+
+	public void createSalesOrder(SalesOrderForm form, User user) {
+        // Create order
+        Order order = new Order();
+        order.setUser(user);
+        order.setCustomer(customerRepo.findById(form.getCustomerId())
+                          .orElseThrow(() -> new RuntimeException("Customer not found")));
+        order.setType("out"); // sale
+        order.setNotes(form.getNotes());
+
+        Order saved = orderRepo.save(order);
+
+        double total = 0.0;
+
+        // Iterate over selected products
+        List<SalesProductDTO> products = form.getProducts();
+        if (products != null) {
+            for (SalesProductDTO dto : products) {
+                if (dto.getId() == null || dto.getQuantity() == null || dto.getQuantity() <= 0) {
+                    continue;
+                }
+
+                Product product = productRepo.findById(dto.getId())
+                                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                Inventory inventory = inventoryRepo.getByProductId(dto.getId());
+
+                if (inventory.getQuantity() < dto.getQuantity()) {
+                    throw new OutOfStockException("Not enough stock for " + product.getName());
+                }
+
+                // Reduce inventory
+                inventory.setQuantity(inventory.getQuantity() - dto.getQuantity());
+                inventoryRepo.save(inventory);
+
+                // Save order details
+                orderDetailRepo.saveOrderDetails(dto.getQuantity(),
+                                                 dto.getUnitPrice(),
+                                                 saved.getOrderId(),
+                                                 dto.getId());
+
+                // Add log
+                Log log = new Log();
+                log.setUser(user);
+                log.setAction("SALE");
+                log.setEntityType("product");
+                log.setEntityId(Long.valueOf(dto.getId()));
+                log.setTimestamp(OffsetDateTime.now());
+                log.setDetails("Sold " + dto.getQuantity() + " units of "
+                        + product.getName() + " to customer " + order.getCustomer().getName());
+                logRepo.save(log);
+
+                total += dto.getQuantity() * dto.getUnitPrice();
+            }
         }
 
         saved.setTotalAmount(total);
         orderRepo.save(saved);
     }
-}
 
+}

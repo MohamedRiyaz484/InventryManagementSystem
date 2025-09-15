@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- ORDER_DETAIL ----------------
 @Entity
@@ -37,11 +38,13 @@ public class OrderDetail{
  // Associations
  @ManyToOne
  @JoinColumn(name = "order_id", nullable = false)
+ @ToString.Exclude
  private Order order;
 
  @ManyToOne
  @JoinColumn(name = "product_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private Product product;
 
  // Getters and Setters

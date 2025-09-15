@@ -9,10 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.project.IMS.entity.Supplier;
+import com.project.IMS.entity.User;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long>{
 	@Query(value = "select * from suppliers where user_id= :userId" , nativeQuery = true)
 	List<Supplier> getByUserId(@Param("userId") Integer id);
 	  Optional<Supplier> findByName(String name);
-	    List<Supplier> findByUserId(Integer userId);
+	 //  List<Supplier> findByUserId(Integer userId);
+	 //  List<Supplier> findByUser_Id(Integer userId);
+//	  Optional<User> findById(Integer id);
+	  List<Supplier> findByUser_Id(Integer userId); 
+
 }

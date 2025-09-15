@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- ORDER ----------------
 @Entity(name = "Orders")
@@ -46,20 +47,24 @@ public class Order {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 // @JsonBackReference
+ @ToString.Exclude
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "supplier_id")
 // @JsonBackReference
+ @ToString.Exclude
  private Supplier supplier;
 
  @ManyToOne
  @JoinColumn(name = "customer_id")
 // @JsonBackReference
+ @ToString.Exclude
  private Customer customer;
 
  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonManagedReference
+ @ToString.Exclude
  private List<OrderDetail> orderDetails;
 
 }

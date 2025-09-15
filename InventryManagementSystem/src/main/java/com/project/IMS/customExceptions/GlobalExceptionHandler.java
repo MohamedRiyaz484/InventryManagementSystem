@@ -23,11 +23,11 @@ public class GlobalExceptionHandler {
         return mav;
     }
     // Handle all other exceptions
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleGeneralException(Exception ex) {
-        ModelAndView mav = new ModelAndView("error"); // error.jsp
-        mav.addObject("message", "Something went wrong: " + ex.getMessage());
-        mav.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        return mav;
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleGeneralException(Exception ex) {
+//        ModelAndView mav = new ModelAndView("error"); // error.jsp
+//        mav.addObject("message", "Something went wrong: " + ex.getMessage());
+//        mav.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+//        return mav;
+//    }
 }

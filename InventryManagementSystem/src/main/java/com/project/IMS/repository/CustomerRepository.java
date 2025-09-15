@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Modifying // To tell this is not a select query
 	@Transactional//required because insert/update needs a transaction.
-	@Query(value = "insert into customers values(default,:us,:con,:name)" ,nativeQuery = true)
+	@Query(value = "insert into customers values(:us,default,:con,:name)" ,nativeQuery = true)
 	void saveCustomer(@Param(value = "us") Integer us,@Param("con") String con,@Param("name") String name);
 	
 	@Query(value = "select * from customers where user_id = :userId" ,nativeQuery=true)

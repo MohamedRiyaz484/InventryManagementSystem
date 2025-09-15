@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- CUSTOMER ----------------
 @Entity
@@ -45,9 +46,11 @@ public class Customer {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private User user;
 
  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonBackReference
+ @ToString.Exclude
  private List<Order> orders;
 }

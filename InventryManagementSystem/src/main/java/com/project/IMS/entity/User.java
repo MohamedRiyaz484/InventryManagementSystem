@@ -28,6 +28,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 // ---------------- USERS ----------------
 @Entity
@@ -65,31 +66,38 @@ public class User {
     // Associations
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Inventory> inventories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
   // @JsonIgnore
+    @ToString.Exclude
     private List<Supplier> suppliers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Customer> customers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
+    @ToString.Exclude
     private List<Log> logs;
 
 }

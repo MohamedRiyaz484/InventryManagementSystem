@@ -34,47 +34,50 @@
 
     <form action="/orders/sales" method="post" class="card p-4 shadow-sm">
 
-        <!-- Customer Search with Suggestions -->
+        <!-- Customer Dropdown -->
         <div class="form-section mb-3">
             <label for="customerId" class="form-label fw-bold">Customer</label>
-            <input class="form-control" list="customersList" id="customerId" name="customerId"
-                   placeholder="Search or select a customer..." required onfocus="this.showPicker?.()">
-
-            <datalist id="customersList">
+            <select id="customerId" name="customerId" class="form-select" required>
                 <%
                     List<Customer> customers = (List<Customer>) request.getAttribute("customers");
                     if (customers != null && !customers.isEmpty()) {
                         for (Customer c : customers) {
                 %>
-                    <option value="<%= c.getCustomerId() %> - <%= c.getName() %> (<%= c.getContactInfo() %>)"></option>
+                    <option value="<%= c.getCustomerId() %>">
+                        <%= c.getName() %> (<%= c.getContactInfo() %>)
+                    </option>
                 <%
                         }
+                    } else {
+                %>
+                    <option disabled>No customers available</option>
+                <%
                     }
                 %>
-            </datalist>
+            </select>
         </div>
 
-        <!-- Notes (Descriptive Box) -->
+        <!-- Notes -->
         <div class="form-section mb-3">
             <label for="notes" class="form-label fw-bold">Notes</label>
-            <textarea id="notes" name="notes" class="form-control" rows="4" placeholder="Enter detailed notes..."></textarea>
-        </div>
-
-        <!-- Search Bar for Products -->
-        <div class="form-section mb-3">
-            <label for="productSearch" class="form-label fw-bold">Search Products</label>
-            <input type="text" id="productSearch" class="form-control" placeholder="Type to search products in the table...">
+            <input type="text" id="notes" name="notes" class="form-control" placeholder="Enter notes...">
         </div>
 
         <!-- Products Table -->
         <h5 class="mb-3">Select Products to Sell</h5>
-        <table class="table table-bordered table-hover text-center align-middle" id="productsTable">
+
+        <!-- Search Box -->
+        <div class="mb-3">
+            <input type="text" id="productSearch" class="form-control" placeholder="🔍 Search products...">
+        </div>
+
+        <table id="productTable" class="table table-bordered table-hover text-center align-middle">
             <thead class="table-dark">
                 <tr>
                     <th>Select</th>
                     <th>Product</th>
                     <th>Quantity To Sell</th>
-                    <th>Product Price</th>
+                    <th>Unit Price</th>
                     <th>Available Quantity</th>
                 </tr>
             </thead>
@@ -82,16 +85,24 @@
                 <%
                     List<ProductDetailsDTO> products = (List<ProductDetailsDTO>) request.getAttribute("products");
                     if (products != null && !products.isEmpty()) {
+                        int index = 0;
                         for (ProductDetailsDTO p : products) {
                 %>
                 <tr>
-                    <td><input type="checkbox" name="product_id" value="<%= p.getProductId() %>"></td>
+                    <td>
+                        <input type="checkbox" name="products[<%= index %>].id" value="<%= p.getProductId() %>">
+                    </td>
                     <td><%= p.getName() %></td>
-                    <td><input type="number" name="quantity" class="form-control" min="1"></td>
-                    <td><input type="number" name="unit_price" class="form-control" value="<%= p.getPrice() %>" step="0.01"></td>
+                    <td>
+                        <input type="number" name="products[<%= index %>].quantity" class="form-control" min="0">
+                    </td>
+                    <td>
+                        <input type="number" name="products[<%= index %>].unitPrice" value="<%= p.getPrice() %>" step="0.01" class="form-control">
+                    </td>
                     <td><%= p.getQuantity() %></td>
                 </tr>
                 <%
+                            index++;
                         }
                     } else {
                 %>
@@ -111,17 +122,20 @@
     </form>
 </div>
 
-<!-- Bootstrap JS -->
+<!-- Bootstrap + Search Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Product Search Script -->
 <script>
     document.getElementById("productSearch").addEventListener("keyup", function() {
         let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#productsTable tbody tr");
+        let rows = document.querySelectorAll("#productTable tbody tr");
+
         rows.forEach(row => {
-            let productName = row.cells[1].innerText.toLowerCase();
-            row.style.display = productName.includes(filter) ? "" : "none";
+            let productName = row.cells[1]?.textContent.toLowerCase();
+            if (productName && productName.includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
         });
     });
 </script>

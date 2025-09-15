@@ -35,11 +35,12 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
     
+//    public List<Supplier> getSuppliersByUserId(Integer userId) {
+//        return supplierRepository.findByUserId(userId);
+//    }
     public List<Supplier> getSuppliersByUserId(Integer userId) {
-        return supplierRepository.findByUserId(userId);
+        return supplierRepository.getByUserId(userId);
     }
-
-
     public Supplier updateSupplier(Long id, Supplier supplierDetails) {
         Supplier existing = getSupplierById(id);
 

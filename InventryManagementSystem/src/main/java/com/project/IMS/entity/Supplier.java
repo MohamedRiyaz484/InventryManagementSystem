@@ -24,6 +24,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- SUPPLIER ----------------
 @Entity
@@ -64,12 +65,14 @@ public class Supplier {
 // @JoinColumn(name = "user_id", nullable = false)
  //@JsonManagedReference
  @JoinColumn(name = "user_id")
-//@JsonIdentityReference(alwaysAsId = true)  
+@JsonIdentityReference(alwaysAsId = true) 
+ @ToString.Exclude
  private User user;
 
  @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonBackReference
  //@JsonIgnore
+ @ToString.Exclude
  private List<Order> orders;
 
  // Getters and Setters

@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- CATEGORY ----------------
 @Entity
@@ -43,6 +44,7 @@ public class Category {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 //@JsonManagedReference
+ @ToString.Exclude
  private User user;
 
  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)

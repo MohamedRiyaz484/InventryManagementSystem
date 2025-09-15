@@ -18,6 +18,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- INVENTORY ----------------
 @Entity
@@ -50,11 +51,13 @@ public class Inventory {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "product_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private Product product;
 
 }

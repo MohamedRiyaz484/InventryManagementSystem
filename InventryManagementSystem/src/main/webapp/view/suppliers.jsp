@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Supplier Management</title>
+<title>Supplier acManagement</title>
 <style>
 /* Basic CSS for styling table, buttons, modal, toast, etc. */
 body { font-family: Arial, sans-serif; margin: 20px; }

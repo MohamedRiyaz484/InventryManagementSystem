@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- LOG ----------------
 @Entity
@@ -47,6 +48,7 @@ public class Log {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private User user;
 
  // Getters and Setters

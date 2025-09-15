@@ -21,6 +21,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 //---------------- PRODUCT ----------------
 @Entity
@@ -51,19 +52,23 @@ public class Product {
  @ManyToOne
  @JoinColumn(name = "user_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private User user;
 
  @ManyToOne
  @JoinColumn(name = "category_id", nullable = false)
 // @JsonManagedReference
+ @ToString.Exclude
  private Category category;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonBackReference
+ @ToString.Exclude
  private List<Inventory> inventories;
 
  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 // @JsonBackReference
+ @ToString.Exclude
  private List<OrderDetail> orderDetails;
 
  // Getters and Setters

@@ -24,12 +24,33 @@
         .action-buttons {
             margin-bottom: 20px;
         }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-back {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 class="text-center">Orders</h2>
+    <!-- Top Bar with Back Button -->
+    <div class="top-bar">
+        <h2 class="text-center">Orders</h2>
+        <a href="${pageContext.request.contextPath}/home" class="btn-back">Back to Main Menu</a>
+    </div>
     
     <!-- Action buttons -->
     <div class="action-buttons d-flex justify-content-center gap-3">
@@ -58,9 +79,8 @@
                 <th>Notes</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-				<th>Total Amount</th>
+                <th>Total Amount</th>
                 <th>Order Type</th>
-				
             </tr>
         </thead>
         <tbody>
@@ -74,20 +94,19 @@
                 <td><%= od.getNotes() %></td>
                 <td><%= od.getQuantity() %></td>
                 <td>₹ <%= od.getUnitPrice() %></td>
-				<td> <%= od.getTotalAmount()%> </td>
+                <td><%= od.getTotalAmount() %></td>
                 <td>
                     <span class="badge <%= od.getType().equalsIgnoreCase("in") ? "bg-success" : "bg-primary" %>">
                         <%= od.getType().equalsIgnoreCase("in") ? "Purchase" : "Sale" %>
                     </span>
                 </td>
-				
             </tr>
         <%
                 }
             } else {
         %>
             <tr>
-                <td colspan="5" class="text-muted">No data available</td>
+                <td colspan="6" class="text-muted">No data available</td>
             </tr>
         <%
             }

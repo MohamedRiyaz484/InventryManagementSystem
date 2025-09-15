@@ -30,4 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 	@Query(value = "insert into orders values (:date,:cusId,default,null,:userId,:notes,:type)",nativeQuery = true)
 	Order addSales(@Param("date") Date date,@Param("cusId") Integer cusId,@Param("userId")Integer userId,@Param("notes") String notes,@Param("type")String type);
 	
+	@Query(value = "select * from orders where user_id= :user", nativeQuery = true)
+	List<Order> getOrdersByUserId(@Param("user") Integer id);
+	
 }
