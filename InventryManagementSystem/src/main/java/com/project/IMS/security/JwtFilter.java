@@ -44,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
     		    path.startsWith("/send-otp") || path.startsWith("/verify-otp") ||
     		    path.startsWith("/forgot-password") || path.startsWith("/send-forgot-otp") ||
     		    path.startsWith("/verify-forgot-otp") || path.startsWith("/reset-password") ||
-    		    path.startsWith("/view/") || path.equals("/error")) {
+    		    path.startsWith("/view/") || path.startsWith("/images/") || path.equals("/error")){
 
     		    chain.doFilter(request, response); // allow request to proceed
     		    return;
@@ -89,5 +89,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
-    }
-    }
+    }}

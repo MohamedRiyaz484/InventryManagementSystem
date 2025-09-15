@@ -51,22 +51,17 @@ public class User {
 
 
 	    @NotBlank(message = "Password is required")
-//	    @Pattern(
-//	    	    regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-//	    	    message = "Password must be at least 8 characters and include letters, numbers, and special characters"
-//	    	)
 	    	private String pwd;
 
 
 	    @NotBlank(message = "Phone number is required")
-	   // @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits")
 	    private String phoneNumber;
 
 
     // Associations
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
-    @ToString.Exclude
+   @ToString.Exclude
     private List<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -87,7 +82,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
    // @JsonBackReference
-    @ToString.Exclude
+  @ToString.Exclude
     private List<Customer> customers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

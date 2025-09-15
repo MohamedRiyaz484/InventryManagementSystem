@@ -49,7 +49,12 @@ public class SecurityConfig {
                     // ✅ Allow POST for login, registration, OTP, forgot/reset password
                     .requestMatchers(HttpMethod.POST, "/dologin", "/send-otp", "/verify-otp",
                                      "/send-forgot-otp", "/verify-forgot-otp", "/reset-password").permitAll()
-
+                    .requestMatchers(
+                            "/images/**",   // images
+                            "/css/**",     // styles
+                            "/js/**",      // scripts
+                            "/webjars/**"  // packaged libs
+                        ).permitAll()
                 .requestMatchers("/view/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/error").permitAll()
                 .requestMatchers(HttpMethod.POST, "/error").permitAll()

@@ -1,3 +1,4 @@
+
 <%@ page isELIgnored="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -13,68 +14,247 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Supplier acManagement</title>
+<title>Supplier Management</title>
 <style>
-/* Basic CSS for styling table, buttons, modal, toast, etc. */
-body { font-family: Arial, sans-serif; margin: 20px; }
-h1 { margin-bottom: 20px; }
-#searchInput { width: 250px; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
-th { background-color: #f2f2f2; }
-button {
-    padding: 6px 12px;
-    margin: 0 2px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f6fa;
+        margin: 20px;
+        color: #333;
+    }
 
-.btn-add {
-    background-color: #007bff;
-    color: white;
-    float: right;
-    margin-bottom: 20px;
-}
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
 
-.btn-edit {
-    background-color: orange;
-    color: white;
-    min-width: 70px;
-    text-align: center;
-}
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 
-.btn-delete {
-    background-color: red;
-    color: white;
-    min-width: 70px;
-    text-align: center;
-}
+    #searchInput {
+        flex: 1;
+        max-width: 350px;
+        padding: 10px 14px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        color: #444;
+    }
 
-/* Align the Edit and Delete buttons */
-td:last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
+    /* Add Supplier Button (above table, aligned right) */
+    .btn-add {
+        display: inline-block;
+        background-color: #4c8bf5;
+        color: white;
+        padding: 10px 18px;
+        font-size: 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(76, 139, 245, 0.3);
+        margin-bottom: 12px;
+        float: right;
+    }
 
-/* Modal styles */
-.modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-.modal-content { background-color: white; margin: 10% auto; padding: 20px; border-radius: 8px; width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-.modal-content h2 { margin-top: 0; }
-.modal-content label { display: block; margin: 12px 0 6px 0; }
-.modal-content input, .modal-content textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-.modal-footer { margin-top: 15px; text-align: right; }
-.modal-footer button { margin-left: 8px; }
-.btn-save { background-color: green; color: white; }
-.btn-cancel { background-color: grey; color: white; }
-/* Toast notification */
-#toast { visibility: hidden; min-width: 250px; background-color: #f44336; color: white; text-align: center; border-radius: 4px; padding: 12px; position: fixed; top: 20px; right: 20px; z-index: 20; font-size: 14px; }
-#toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 3s; }
-@keyframes fadein { from {top: 0; opacity: 0;} to {top: 20px; opacity: 1;} }
-@keyframes fadeout { from {top: 20px; opacity: 1;} to {top: 0; opacity: 0;} }
+    .btn-add:hover {
+        background-color: #3367d6;
+    }
+
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    th, td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    th {
+        background-color: #1c262f;
+        color: #f0f0f0;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    th:last-child {
+        text-align: center;
+    }
+
+    td {
+        color: #222; /* Darker text */
+    }
+
+    td:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Action Buttons */
+    .btn-edit {
+        background-color: #f0ad4e;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-edit:hover {
+        background-color: #ec971f;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 8% auto;
+        padding: 20px 25px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    .modal-content label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .modal-footer {
+        text-align: right;
+    }
+
+    .modal-footer button {
+        padding: 8px 14px;
+        font-size: 14px;
+        border-radius: 5px;
+        margin-left: 8px;
+    }
+
+    .btn-save {
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-save:hover {
+        background-color: #27ae60;
+    }
+
+    .btn-cancel {
+        background-color: #7f8c8d;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-cancel:hover {
+        background-color: #636e72;
+    }
+
+    /* Toast notification */
+    #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #e74c3c;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 12px;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-size: 14px;
+    }
+
+    #toast.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 3s;
+    }
+
+    @keyframes fadein {
+        from { top: 0; opacity: 0; }
+        to { top: 20px; opacity: 1; }
+    }
+
+    @keyframes fadeout {
+        from { top: 20px; opacity: 1; }
+        to { top: 0; opacity: 0; }
+    }
 </style>
+
 </head>
 <body>
 <h1>Supplier Management</h1>
@@ -321,6 +501,7 @@ function saveSupplier() {
             switch (res.status) {
                 case 400: showToast("Invalid input!"); break;
                 case 404: showToast("Supplier not found!"); break;
+				case 409: showToast("Supplier with this email already exists!"); break; 
                 case 415: showToast("Unsupported format!"); break;
                 case 500: showToast("Server error!"); break;
                 default: showToast(`Error ${res.status}`); 

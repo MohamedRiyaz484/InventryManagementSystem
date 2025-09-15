@@ -23,15 +23,20 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 //---------------- SUPPLIER ----------------
 @Entity
 @Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "suppliers")
+
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "supplierId")
 public class Supplier {
 
@@ -65,8 +70,9 @@ public class Supplier {
 // @JoinColumn(name = "user_id", nullable = false)
  //@JsonManagedReference
  @JoinColumn(name = "user_id")
-@JsonIdentityReference(alwaysAsId = true) 
+//@JsonIdentityReference(alwaysAsId = true) 
  @ToString.Exclude
+// @JsonIgnore
  private User user;
 
  @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
