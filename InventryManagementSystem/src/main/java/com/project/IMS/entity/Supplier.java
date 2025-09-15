@@ -2,11 +2,8 @@ package com.project.IMS.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
@@ -23,9 +20,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 //---------------- SUPPLIER ----------------
@@ -70,8 +65,8 @@ public class Supplier {
 // @JoinColumn(name = "user_id", nullable = false)
  //@JsonManagedReference
  @JoinColumn(name = "user_id")
-//@JsonIdentityReference(alwaysAsId = true) 
- @ToString.Exclude
+@JsonIdentityReference(alwaysAsId = true) 
+@ToString.Exclude
 // @JsonIgnore
  private User user;
 
@@ -83,4 +78,3 @@ public class Supplier {
 
  // Getters and Setters
 }
-
